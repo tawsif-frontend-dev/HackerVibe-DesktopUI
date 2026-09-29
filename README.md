@@ -10,7 +10,7 @@ Clock · Calendar · Weather · System Monitor · Network · Terminal Stats · Q
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Fonts: OFL](https://img.shields.io/badge/fonts-OFL--1.1-orange)](Skins/HackerSuite/@Resources/Fonts)
 
-![4-theme preview](docs/preview.png)
+![Desktop preview](docs/preview.png)
 
 </div>
 
