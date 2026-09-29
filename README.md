@@ -10,7 +10,8 @@ Clock · Calendar · Weather · System Monitor · Network · Terminal Stats · Q
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Fonts: OFL](https://img.shields.io/badge/fonts-OFL--1.1-orange)](Skins/HackerSuite/@Resources/Fonts)
 
-![Desktop preview](docs/preview.png)
+![Desktop preview — all 4 themes](docs/preview.png)
+*Green · Blue · Red · Purple — same layout, live-swapped colors and wallpaper.*
 
 </div>
 
