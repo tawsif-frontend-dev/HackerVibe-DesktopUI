@@ -1,4 +1,4 @@
-# Hacker Desktop Suite
+# Hacker Vibe Desktop Suite UI
 
 A cyberpunk-themed [Rainmeter](https://www.rainmeter.net) desktop suite — clock,
 calendar, weather, system status, network monitor, terminal-style stats,
