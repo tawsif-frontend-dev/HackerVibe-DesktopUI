@@ -11,11 +11,19 @@ function Ask($q, $default) {
     if ([string]::IsNullOrWhiteSpace($a)) { $default } else { $a.Trim() }
 }
 function Set-Setting($file, $key, $value) {
-    $text = [IO.File]::ReadAllText($file)
-    $pattern = "(?m)^$([regex]::Escape($key))=.*$"
-    $safe = $value -replace '\$', '$$$$'
-    $text = [regex]::Replace($text, $pattern, "$key=$safe")
-    [IO.File]::WriteAllText($file, $text, (New-Object Text.UTF8Encoding($true)))
+    $value = ([string]$value) -replace '[\r\n]', ' '
+    $pattern = "^\s*$([regex]::Escape($key))="
+    $lines = New-Object 'System.Collections.Generic.List[string]'
+    $found = $false
+    foreach ($line in [IO.File]::ReadAllLines($file)) {
+        if ($line -match $pattern) {
+            if (-not $found) { $lines.Add("$key=$value"); $found = $true }
+        } else {
+            $lines.Add($line)
+        }
+    }
+    if (-not $found) { $lines.Add("$key=$value") }
+    [IO.File]::WriteAllLines($file, $lines.ToArray(), (New-Object Text.UTF8Encoding($true)))
 }
 
 # ---- 1. find Rainmeter ------------------------------------------------
@@ -44,10 +52,21 @@ $evName  = Ask 'Countdown event name (calendar widget)' 'New Year'
 $evDay   = Ask 'Event day (1-31)' '1'
 $evMonth = Ask 'Event month (1-12)' '1'
 
-# ---- 3. copy files (keep nothing stale) -------------------------------
-if (Test-Path $target) { Remove-Item $target -Recurse -Force }
-Copy-Item $source $target -Recurse -Force
 $settings = Join-Path $target '@Resources\Settings.inc'
+# ---- 3. update files without replacing user settings or quotes --------
+$quotes = Join-Path $target '@Resources\Quotes.txt'
+$hadSettings = Test-Path $settings
+$hadQuotes = Test-Path $quotes
+if ($hadSettings) {
+    $backup = "$settings.backup.$(Get-Date -Format 'yyyyMMdd-HHmmss-fff')"
+    Copy-Item $settings $backup
+    Write-Host "Backed up existing settings to: $backup" -ForegroundColor Yellow
+}
+New-Item $target -ItemType Directory -Force | Out-Null
+& robocopy $source $target /E /XF Settings.inc Quotes.txt /NFL /NDL /NJH /NJS /NP | Out-Null
+if ($LASTEXITCODE -ge 8) { throw "Skin copy failed (robocopy exit code $LASTEXITCODE). Existing files were not removed." }
+if (-not $hadSettings) { Copy-Item (Join-Path $source '@Resources\Settings.inc') $settings }
+if (-not $hadQuotes) { Copy-Item (Join-Path $source '@Resources\Quotes.txt') $quotes }
 
 # ---- 4. detect machine-specific paths ---------------------------------
 $vs = @("$env:LOCALAPPDATA\Programs\Microsoft VS Code\Code.exe", "$env:ProgramFiles\Microsoft VS Code\Code.exe") |

@@ -24,10 +24,9 @@ It ships with **4 switchable color themes** — Green, Blue, Red, Purple —
 that recolor every widget *and* swap the desktop wallpaper in sync, either
 manually with one click or automatically on a timer.
 
-The installer is interactive: it asks for your name and links once, then
-generates a personalized wallpaper and wires up every config for your
-machine. No file in this repo hard-codes anyone's username, file paths, or
-personal details — it's built to be cloned and set up by anyone.
+The installer asks for per-user details, generates personalized wallpapers,
+and configures shortcuts for the current machine. Settings live in the
+installed skin folder; the source tree contains generic defaults.
 
 ## Features
 
@@ -62,12 +61,16 @@ The installer will:
 
 1. Locate your Rainmeter install and skins folder automatically
 2. Ask for your name, portfolio/GitHub link, and a countdown event
-3. Copy the skin into `Documents\Rainmeter\Skins`
+3. Copy the skin into Rainmeter's configured skin path (usually `Documents\Rainmeter\Skins`)
 4. Render your personalized wallpaper in all 4 theme colors
 5. Install the bundled fonts for your user account
 6. Load every widget in Rainmeter
 
-Run `install.bat` again any time to update your name or links.
+Run `install.bat` again to update installer-managed values. Existing settings
+are backed up before those values are updated; custom settings, quotes, and
+other files in the installed skin are retained. If installation is interrupted,
+rerun `install.bat`; use the timestamped settings backup in the installed
+`@Resources` folder to recover previous values if needed.
 
 <details>
 <summary><strong>Prefer a manual install?</strong></summary>
@@ -81,8 +84,18 @@ your own quotes.
 
 Everything lives in one file:
 [`Skins/HackerSuite/@Resources/Settings.inc`](Skins/HackerSuite/@Resources/Settings.inc).
-Right-click any widget → **Edit settings**, make a change, then
+After installation, edit the installed skin's `@Resources/Settings.inc` (right-click
+any widget → **Edit settings**), then
 **Refresh all** to apply it. Theme switching never touches this file.
+
+## Safe Removal
+
+Run `powershell -ExecutionPolicy Bypass -File .\uninstall.ps1` from the
+repository folder. After confirmation, the script deactivates the suite and
+moves the complete installed skin to a timestamped archive outside Rainmeter's
+active skin folder. Review that archive before deleting it; it includes settings,
+quotes, and any other custom files. Installed fonts are left in place because
+they may be shared with other applications.
 
 ## Switching Themes
 
@@ -92,6 +105,10 @@ instantly recolors every widget and updates the wallpaper together.
 To cycle automatically, load `ThemeCycler.ini` from Rainmeter's manage
 window — it rotates through all 4 themes on a timer you set in
 `Settings.inc` (`ThemeCycleMinutes`).
+
+## Privacy
+
+Weather uses Open-Meteo. By default, the configured coordinates are sent to Open-Meteo and IP-based location detection is disabled. To enable automatic location, set `WeatherAuto=1` in `Settings.inc`; this contacts `ip-api.com` over HTTP and exposes your public IP address to that service. The network widget also pings the configured host (`PingHost`, default `1.1.1.1`).
 
 ## Rebuilding Wallpapers
 
@@ -132,9 +149,11 @@ or names); route user-specific values through `Settings.inc` instead.
 
 ## License
 
-Code is licensed under [MIT](LICENSE). Bundled fonts (JetBrains Mono,
-Orbitron, Open Sans, Roboto) keep their own SIL Open Font License — see
-`Skins/HackerSuite/@Resources/Fonts/OFL-*.txt`.
+Project code is licensed under [MIT](LICENSE). Bundled JetBrains Mono and
+Orbitron font license texts are included in `Skins/HackerSuite/@Resources/Fonts/`.
+The redistribution license and source provenance for the bundled Open Sans
+and Roboto files are not documented in this source tree and must be confirmed
+before a release containing those files.
 
 ---
 
