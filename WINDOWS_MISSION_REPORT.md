@@ -29,10 +29,11 @@ The source tree contains Rainmeter skins, PowerShell/batch installers, wallpaper
 - Static privacy default and batch exit-code assertions. **PASS**.
 - Root README relative links. **PASS**.
 - Workspace diagnostics for edited PowerShell/Python files reported no errors.
+- GitHub Actions [Windows checks run #1](https://github.com/tawsif-frontend-dev/HackerVibe-DesktopUI/actions/runs/39049840247) completed successfully for commit `bbe8440`; Python compilation, RMSKIN archive tests, PowerShell parsing, and weather-default checks passed.
 
 ## 5. Failed or Unresolved Tests
 
-No unresolved test failure is known. Python test execution was attempted but the host has only the Microsoft Store `python.exe` alias; Python is not installed. The RMSKIN test and workflow therefore have not run. The full installer and uninstaller were not executed against a Rainmeter installation.
+No unresolved test failure is known. Python is not installed on this Windows host (only the Microsoft Store alias is present), but Python compilation and the RMSKIN test passed on the GitHub Windows runner. The full installer and uninstaller were not executed against a Rainmeter installation.
 
 ## 6. Not Verified
 
@@ -43,7 +44,7 @@ No unresolved test failure is known. Python test execution was attempted but the
 
 ## 7. Security, Privacy, and Licensing
 
-Weather now uses configured coordinates by default; enabling `WeatherAuto=1` contacts `ip-api.com` over HTTP and discloses the public IP. Forecasts use Open-Meteo. The network widget pings `PingHost` (default `1.1.1.1`). The packager includes the repository MIT license and the bundled JetBrains Mono and Orbitron OFL texts. The tree also contains Open Sans and Roboto font binaries but no corresponding license/provenance files. Their redistribution rights must be confirmed before shipping those files; this is a release blocker. No credentials were added. A comprehensive security/secret scan was not available.
+Weather now uses configured coordinates by default; enabling `WeatherAuto=1` contacts `ip-api.com` over HTTP and discloses the public IP. Forecasts use Open-Meteo. The network widget pings `PingHost` (default `1.1.1.1`). The packager includes the repository MIT license and the bundled JetBrains Mono and Orbitron OFL texts. Embedded metadata identifies Open Sans Light as v1.10 (2010-2011) and Roboto as v2.137 (2017); their exact historical distribution licenses/provenance could not be established from the available upstream records. Current Google Fonts license files do not prove the terms for these older binaries. Confirm their licenses or remove them before shipping; this remains a release blocker. No credentials were added. A comprehensive security/secret scan was not available.
 
 ## 8. Install, Update, and Uninstall Status
 
@@ -58,11 +59,11 @@ Weather now uses configured coordinates by default; enabling `WeatherAuto=1` con
 3. Customize `Settings.inc` and `Quotes.txt`, rerun `install.bat`, and verify the settings backup and custom files remain intact.
 4. Switch Green/Blue/Red/Purple manually and automatically; check every widget and wallpaper.
 5. Run `powershell -ExecutionPolicy Bypass -File .\uninstall.ps1`; confirm the skin is deactivated and the complete timestamped archive remains recoverable.
-6. On a Python-enabled Windows runner, run `python -m unittest discover -s tests -v`, `python -m compileall -q tools tests`, then inspect/install the generated package with Rainmeter.
+6. Python compilation and RMSKIN archive tests passed in GitHub Actions; install the generated package with Rainmeter and verify the actual skins.
 
 ## 10. Release Readiness
 
-**Not ready for release.** The destructive reinstall behavior is fixed and tested in isolation, and package/CI checks are added. Release evidence is incomplete because Rainmeter is unavailable, Python tests did not run, and the bundled Open Sans/Roboto license provenance is unresolved. Do not publish a package containing those fonts until licensing is verified.
+**Not ready for release.** The Windows CI and RMSKIN integrity test pass, and the destructive reinstall behavior is fixed and tested in isolation. Actual Rainmeter install/widget/uninstall acceptance remains unverified, and Open Sans/Roboto license provenance is unresolved. Do not publish a package containing those fonts until licensing is verified.
 
 ## 11. Changed Files
 
@@ -87,7 +88,7 @@ Weather now uses configured coordinates by default; enabling `WeatherAuto=1` con
 ### Release Checklist
 
 - [ ] Verify Open Sans and Roboto redistribution licenses and include their notices.
-- [ ] Run Windows CI and package integrity tests on a Python-enabled runner.
+- [x] Run Windows CI and package integrity tests on a Python-enabled runner.
 - [ ] Test clean install, reinstall with custom data, all widgets/themes, and safe removal on Rainmeter 4.4+.
 - [ ] Inspect RMSKIN contents and install the package with Rainmeter.
 - [ ] Review the timestamped settings backup and archive-removal instructions.
