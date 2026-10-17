@@ -151,9 +151,10 @@ or names); route user-specific values through `Settings.inc` instead.
 
 Project code is licensed under [MIT](LICENSE). Bundled JetBrains Mono and
 Orbitron font license texts are included in `Skins/HackerSuite/@Resources/Fonts/`.
-The redistribution license and source provenance for the bundled Open Sans
-and Roboto files are not documented in this source tree and must be confirmed
-before a release containing those files.
+The legacy Open Sans Light v1.10 and Roboto v2.137 font files are distributed
+under Apache-2.0 based on their embedded versions and historical Google Fonts
+license metadata. Their license and version/source notes are included in the
+same `Fonts/` directory.
 
 ---
 

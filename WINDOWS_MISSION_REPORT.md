@@ -44,7 +44,7 @@ No unresolved test failure is known. Python is not installed on this Windows hos
 
 ## 7. Security, Privacy, and Licensing
 
-Weather now uses configured coordinates by default; enabling `WeatherAuto=1` contacts `ip-api.com` over HTTP and discloses the public IP. Forecasts use Open-Meteo. The network widget pings `PingHost` (default `1.1.1.1`). The packager includes the repository MIT license and the bundled JetBrains Mono and Orbitron OFL texts. Embedded metadata identifies Open Sans Light as v1.10 (2010-2011) and Roboto as v2.137 (2017); their exact historical distribution licenses/provenance could not be established from the available upstream records. Current Google Fonts license files do not prove the terms for these older binaries. Confirm their licenses or remove them before shipping; this remains a release blocker. No credentials were added. A comprehensive security/secret scan was not available.
+Weather now uses configured coordinates by default; enabling `WeatherAuto=1` contacts `ip-api.com` over HTTP and discloses the public IP. Forecasts use Open-Meteo. The network widget pings `PingHost` (default `1.1.1.1`). The package includes the repository MIT license, JetBrains Mono and Orbitron OFL texts, and Apache-2.0 notices for the legacy Open Sans Light v1.10 and Roboto v2.137 binaries. Historical Google Fonts records show those versions predate the families' later OFL changes; version/source details are in `FONT-NOTICES.txt`. No credentials were added. A comprehensive security/secret scan was not available.
 
 ## 8. Install, Update, and Uninstall Status
 
@@ -54,7 +54,7 @@ Weather now uses configured coordinates by default; enabling `WeatherAuto=1` con
 
 ## 9. Remaining Blockers and Manual Verification
 
-1. Confirm licenses and provenance for `Open Sans Light.ttf`, `Roboto.ttf`, and `Roboto Light.ttf`; add accurate license files or remove those binaries before distribution.
+1. Review the included Apache-2.0 notice and version attribution for the legacy Open Sans/Roboto binaries when assembling a distribution.
 2. On Windows with Rainmeter 4.4+, run `install.bat` from a clean profile and verify all widgets load.
 3. Customize `Settings.inc` and `Quotes.txt`, rerun `install.bat`, and verify the settings backup and custom files remain intact.
 4. Switch Green/Blue/Red/Purple manually and automatically; check every widget and wallpaper.
@@ -63,13 +63,14 @@ Weather now uses configured coordinates by default; enabling `WeatherAuto=1` con
 
 ## 10. Release Readiness
 
-**Not ready for release.** The Windows CI and RMSKIN integrity test pass, and the destructive reinstall behavior is fixed and tested in isolation. Actual Rainmeter install/widget/uninstall acceptance remains unverified, and Open Sans/Roboto license provenance is unresolved. Do not publish a package containing those fonts until licensing is verified.
+**Not ready for release.** The Windows CI and RMSKIN integrity test pass, and the destructive reinstall behavior is fixed and tested in isolation. Actual Rainmeter install/widget/uninstall acceptance remains unverified.
 
 ## 11. Changed Files
 
 - `install.ps1`, `install.bat`: preserve user data, update settings safely, propagate errors.
 - `uninstall.ps1`: deactivate and archive the complete installed skin.
 - `Skins/HackerSuite/@Resources/Settings.inc`, `Skins/HackerSuite/README.txt`: private-by-default weather and accurate privacy instructions.
+- `Skins/HackerSuite/@Resources/Fonts/LICENSE-Apache-2.0.txt`, `FONT-NOTICES.txt`: Apache-2.0 license and historical font attribution.
 - `tools/build_rmskin.py`: license inclusion, output selection, transient-file exclusions.
 - `tests/test_package.py`, `.github/workflows/ci.yml`: package integrity tests and Windows CI.
 - `README.md`: install/update/recovery/removal, privacy, and licensing disclosures.
@@ -83,11 +84,12 @@ Weather now uses configured coordinates by default; enabling `WeatherAuto=1` con
 - Add archive-based, recoverable Windows removal.
 - Disable IP-based weather lookup by default and document network behavior.
 - Include MIT licensing in RMSKIN packages and filter transient files.
+- Document the historical Apache-2.0 license for bundled legacy Open Sans/Roboto fonts.
 - Add package tests and Windows CI.
 
 ### Release Checklist
 
-- [ ] Verify Open Sans and Roboto redistribution licenses and include their notices.
+- [x] Verify historical Open Sans/Roboto license records and include their Apache-2.0 notices.
 - [x] Run Windows CI and package integrity tests on a Python-enabled runner.
 - [ ] Test clean install, reinstall with custom data, all widgets/themes, and safe removal on Rainmeter 4.4+.
 - [ ] Inspect RMSKIN contents and install the package with Rainmeter.

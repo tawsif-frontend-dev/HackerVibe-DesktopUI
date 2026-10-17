@@ -28,6 +28,8 @@ class PackageTests(unittest.TestCase):
             "Skins/HackerSuite/Clock/Clock.ini",
             "Skins/HackerSuite/@Resources/Settings.inc",
             "Skins/HackerSuite/@Resources/Fonts/OFL-JetBrainsMono.txt",
+            "Skins/HackerSuite/@Resources/Fonts/LICENSE-Apache-2.0.txt",
+            "Skins/HackerSuite/@Resources/Fonts/FONT-NOTICES.txt",
             "Skins/HackerSuite/@Resources/Wallpaper/Base/Hacker_Wallpaper_Green_1920x1080.png",
         }
         self.assertTrue(required.issubset(names), f"Missing package entries: {required - names}")
