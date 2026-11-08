@@ -39,14 +39,13 @@ function SetTheme(name)
         print('ThemeCycler: could not write Theme.inc')
         return
     end
-    copyFile(RES .. 'Variables-' .. name .. '.inc', RES .. 'Variables.inc')
 
     if SKIN:GetVariable('ThemeWallpaper', '1') == '1' then
         local wp = RES .. 'Wallpaper\\Hacker_Wallpaper_' .. name .. '_1920x1080.png'
         local f = io.open(wp, 'rb')
         if f then
             f:close()
-            SKIN:Bang('!SetWallpaper', wp)
+            SKIN:Bang('!SetWallpaper', '"' .. wp .. '"')
         end
     end
     SKIN:Bang('!RefreshApp')

@@ -24,9 +24,11 @@ jobs:
         run: |
           $tokens = $null
           $errors = $null
-          foreach ($script in @('install.ps1', 'uninstall.ps1')) {
+          foreach ($script in @('install.ps1', 'uninstall.ps1', 'doctor.ps1')) {
             $errors = $null
             [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $script), [ref]$tokens, [ref]$errors) | Out-Null
             if ($errors.Count) { $errors | ForEach-Object { Write-Error $_ }; exit 1 }
           }
           if (-not (Select-String -Path 'Skins/HackerSuite/@Resources/Settings.inc' -SimpleMatch 'WeatherAuto=0' -Quiet)) { throw 'IP-based weather lookup must remain opt-in by default' }
+          if (-not (Select-String -Path 'Skins/HackerSuite/Calendar/Calendar.ini' -SimpleMatch 'Update=60000' -Quiet)) { throw 'Calendar should refresh once a minute, not every second' }
+          if (Select-String -Path 'Skins/HackerSuite/*/*.ini' -Pattern 'Author=Tawsif' -Quiet) { throw 'Personal author name must not be shipped in the skins' }

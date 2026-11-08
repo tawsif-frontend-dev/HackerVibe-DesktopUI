@@ -7,9 +7,9 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--output", default=os.path.join(ROOT, "HackerSuite.rmskin"))
 out = os.path.abspath(parser.parse_args().output)
 ini = """[rmskin]
-Name=Hacker Desktop Suite
-Author=Tawsif
-Version=3.0.0
+Name=HackerVibe Desktop Suite
+Author=HackerVibe
+Version=4.0.0
 LoadType=Skin
 Load=HackerSuite\\Clock\\Clock.ini
 MinimumRainmeter=4.4.0

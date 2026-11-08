@@ -35,6 +35,26 @@ class PackageTests(unittest.TestCase):
         self.assertTrue(required.issubset(names), f"Missing package entries: {required - names}")
         self.assertFalse(any(".backup." in name or "/__pycache__/" in name for name in names))
 
+    def test_skins_contain_no_personal_names(self):
+        skins = ROOT / "Skins"
+        offenders = []
+        for path in skins.rglob("*"):
+            if path.suffix.lower() not in {".ini", ".inc", ".txt", ".lua"}:
+                continue
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            if "tawsif" in text.lower():
+                offenders.append(str(path.relative_to(ROOT)))
+        self.assertEqual(offenders, [], f"Personal names found in: {offenders}")
+
+    def test_generic_settings_and_required_widgets(self):
+        settings = (ROOT / "Skins/HackerSuite/@Resources/Settings.inc").read_text(encoding="utf-8")
+        self.assertIn("UserName=Hacker", settings)
+        self.assertIn("WeatherAuto=0", settings)
+        self.assertIn("VSCodePath=", settings)
+        self.assertIn("PortfolioURL=", settings)
+        for widget in ("Clock", "Calendar", "Weather", "SystemStatus", "Network", "Terminal", "Quote", "Shortcuts", "ThemeCycler"):
+            self.assertTrue((ROOT / f"Skins/HackerSuite/{widget}/{widget}.ini").is_file(), widget)
+
 
 if __name__ == "__main__":
     unittest.main()

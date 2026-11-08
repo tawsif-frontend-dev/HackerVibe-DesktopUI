@@ -1,36 +1,57 @@
 <#
-  Safely deactivate HackerSuite and move its complete installed folder to an archive.
-  Settings, quotes, and any other user edits remain recoverable in that archive.
+  HackerVibe uninstaller.
+  Deactivates the widgets and removes the installed HackerSuite folder.
+
+    powershell -ExecutionPolicy Bypass -File .\uninstall.ps1
+    ... -Yes        no confirmation prompt
+    ... -KeepFiles  keep the folder (only unload the widgets)
+    ... -SkinRoot   custom Rainmeter skin root
 #>
+[CmdletBinding()]
+param(
+    [switch]$Yes,
+    [switch]$KeepFiles,
+    [string]$SkinRoot
+)
 $ErrorActionPreference = 'Stop'
 
-$skinsRoot = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Rainmeter\Skins'
+$root = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Rainmeter\Skins'
 $rainmeterIni = Join-Path $env:APPDATA 'Rainmeter\Rainmeter.ini'
-if (Test-Path $rainmeterIni) {
-    $skinPathSetting = Select-String -Path $rainmeterIni -Pattern '^SkinPath=(.+)$' | Select-Object -First 1
-    if ($skinPathSetting) { $skinsRoot = $skinPathSetting.Matches[0].Groups[1].Value.Trim() }
+if (Test-Path -LiteralPath $rainmeterIni) {
+    $line = Select-String -LiteralPath $rainmeterIni -Pattern '^SkinPath=(.+)$' | Select-Object -First 1
+    if ($line) { $root = $line.Matches[0].Groups[1].Value.Trim() }
 }
+if ($SkinRoot) { $root = $SkinRoot }
 
-$target = Join-Path $skinsRoot 'HackerSuite'
-if (-not (Test-Path $target)) {
-    Write-Host "HackerSuite was not found at: $target"
+$target = Join-Path $root 'HackerSuite'
+if (-not (Test-Path -LiteralPath $target)) {
+    Write-Host "HackerSuite is not installed at $target"
     exit 0
 }
 
-$archiveName = "HackerSuite-uninstalled-$(Get-Date -Format 'yyyyMMdd-HHmmss-fff')"
-$archive = Join-Path (Split-Path $skinsRoot -Parent) $archiveName
-$answer = Read-Host "Deactivate HackerSuite and archive its complete folder to '$archive'? [y/N]"
-if ($answer -notmatch '^(y|yes)$') {
-    Write-Host 'No files were changed.'
-    exit 0
+$rm = @(
+    "$env:ProgramFiles\Rainmeter\Rainmeter.exe",
+    "${env:ProgramFiles(x86)}\Rainmeter\Rainmeter.exe",
+    "$env:LOCALAPPDATA\Programs\Rainmeter\Rainmeter.exe"
+) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+
+$widgets = @('Clock', 'Calendar', 'Weather', 'SystemStatus', 'Network', 'Terminal', 'Quote', 'Shortcuts', 'ThemeCycler')
+if ($rm -and (Get-Process Rainmeter -ErrorAction SilentlyContinue)) {
+    foreach ($w in $widgets) { & $rm '!DeactivateConfig' "HackerSuite\$w" 2>$null | Out-Null }
+    Start-Sleep -Milliseconds 600
 }
 
-$rainmeterExe = @("$env:ProgramFiles\Rainmeter\Rainmeter.exe", "${env:ProgramFiles(x86)}\Rainmeter\Rainmeter.exe") |
-    Where-Object { Test-Path $_ } | Select-Object -First 1
-if ($rainmeterExe -and (Get-Process Rainmeter -ErrorAction SilentlyContinue)) {
-    & $rainmeterExe '!DeactivateConfig' 'HackerSuite'
+if (-not $Yes) {
+    $action = if ($KeepFiles) { 'Unload the widgets and keep the folder?' } else { "Delete $target ?" }
+    $answer = Read-Host "$action [y/N]"
+    if ($answer -notmatch '^(y|yes)$') { Write-Host 'Nothing was changed.'; exit 0 }
 }
 
-Move-Item -LiteralPath $target -Destination $archive
-Write-Host "HackerSuite was removed from Rainmeter's active skin path. Files were preserved at: $archive" -ForegroundColor Green
-Write-Host 'Bundled fonts were left installed so shared or pre-existing fonts are not removed.'
+if ($KeepFiles) {
+    Write-Host 'Widgets unloaded. Files kept at:' $target -ForegroundColor Green
+} else {
+    Remove-Item -LiteralPath $target -Recurse -Force
+    Write-Host 'Widgets unloaded and HackerSuite files removed.' -ForegroundColor Green
+    Write-Host 'Your desktop wallpaper was not changed. Bundled fonts were left installed.'
+}
+exit 0

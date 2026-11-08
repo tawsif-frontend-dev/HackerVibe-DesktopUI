@@ -1,5 +1,5 @@
 ========================================
- HACKER DESKTOP SUITE - v3
+ HACKER DESKTOP SUITE - v4
 ========================================
 
 Prefer the easy way? Run install.bat from the repo root instead — it
@@ -74,3 +74,11 @@ NOTES
   PortfolioURL in Settings.inc for your own machine and links.
 - Add your own quotes to @Resources/Quotes.txt, one per line as
   `text|author`. Use `{USER}` as the author to credit yourself.
+
+TROUBLESHOOTING
+---------------
+Run doctor.bat in the repo root (or `powershell -File doctor.ps1`).
+It checks Rainmeter, every widget file, the includes, fonts, theme,
+wallpaper and the weather API, and tells you what to fix.
+
+To remove the suite run uninstall.ps1 from the repo root.
