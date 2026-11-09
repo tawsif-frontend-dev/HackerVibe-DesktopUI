@@ -1,5 +1,6 @@
 [Variables]
 Accent=190,140,255,255
+AccentRGB=190,140,255
 Hover=215,180,255,255
 Dim=150,100,200,200
 Faint=100,60,150,160
@@ -7,6 +8,7 @@ Secondary=255,140,220,255
 BG=0,0,0,150
 BarBG=35,25,50,200
 TextLight=225,200,255
+TextLightRGB=225,200,255
 Warn=255,190,60,255
 Crit=255,70,70,255
 ThemeName=Purple

@@ -55,6 +55,26 @@ class PackageTests(unittest.TestCase):
         for widget in ("Clock", "Calendar", "Weather", "SystemStatus", "Network", "Terminal", "Quote", "Shortcuts", "ThemeCycler"):
             self.assertTrue((ROOT / f"Skins/HackerSuite/{widget}/{widget}.ini").is_file(), widget)
 
+    def test_widgets_are_clickable_and_colours_are_customisable(self):
+        skins = ROOT / "Skins/HackerSuite"
+        self.assertTrue((skins / "@Resources/Themes/Custom.inc").is_file())
+        self.assertTrue((skins / "@Resources/Scripts/PickColor.ps1").is_file())
+        actions = (skins / "@Resources/Scripts/Actions.lua").read_text(encoding="utf-8")
+        for function in ("ToggleUnits", "Copy", "ClearCustom"):
+            self.assertIn(f"function {function}", actions)
+
+        terminal = (skins / "Terminal/Terminal.ini").read_text(encoding="utf-8")
+        for role in ("Accent", "Hover", "Dim", "Faint", "Secondary", "Warn", "Crit", "TextLight"):
+            self.assertIn(f"[Sw{role}]", terminal)
+            self.assertIn(f'-Role "{role}"', terminal)
+        self.assertIn("PickColor.ps1", terminal)
+        self.assertIn("ToolTipText", terminal)
+
+        for widget in ("Clock", "Weather", "SystemStatus", "Network", "Terminal", "Quote", "Shortcuts", "ThemeCycler"):
+            ini = (skins / f"{widget}/{widget}.ini").read_text(encoding="utf-8")
+            self.assertIn("Themes\\Custom.inc", ini, widget)
+            self.assertIn("LeftMouseUpAction", ini, widget)
+
 
 if __name__ == "__main__":
     unittest.main()

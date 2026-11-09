@@ -122,6 +122,50 @@ right-click → **Refresh all**. The installer keeps your values on update.
 Weather units are set by the installer. If you edit them by hand, also set
 `WeatherUnitParams`, `TempUnit` and `WindUnit` — or just run `install.bat` again.
 
+## Click anything
+
+Every row, value and swatch reacts to a click. Hover it first — the tooltip says
+what will happen.
+
+| Widget | Click | What happens |
+|---|---|---|
+| Clock | time / AM-PM | Switch 12h ↔ 24h |
+| Clock | seconds | Copy the current time |
+| Clock | date | Open Windows date & time settings |
+| Clock | motto line | Show the motto immediately (middle-click = edit settings) |
+| Terminal | each row | OS / uptime → About, CPU → Task Manager, GPU → Device Manager, MEMORY → Resource Monitor, SCREEN → Display settings |
+| Terminal | CPU model | Copy it to the clipboard |
+| Terminal | THEME | Next theme (right-click = reset custom colors) |
+| Terminal | colour swatches | Pick any colour (see below) |
+| Weather | temperature | Switch °C ↔ °F |
+| Weather | feels like / humidity / wind | Copy that value |
+| Weather | condition / high-low / tomorrow / title | Open the full forecast |
+| Weather | bottom status | Refresh the weather now |
+| System Status | any row or bar | Task Manager, Resource Monitor, disk, network or Windows settings |
+| System Status | IP / uptime | Copy the IP / open About |
+| Network | ping | Open a continuous ping window |
+| Network | adapter | Open network connections (`ncpa.cpl`) |
+| Network | local IP | Copy it |
+| Quote | quote, author or card | Next quote (middle-click author = edit quotes file) |
+| Calendar | card | Date & time settings |
+| Calendar | event line | Edit the countdown date |
+| Shortcuts | title | Edit paths and labels |
+| Theme Cycler | status line | Switch theme now |
+
+### Your own colours
+
+The eight swatches at the bottom of the Terminal widget are the palette used by
+every skin: accent, hover, dim, faint, secondary, warn, crit and body text.
+Left-click a swatch, pick a shade (for example a softer blue), and all widgets
+update instantly. The choice is saved to
+`@Resources\Themes\Custom.inc`, so it survives restarts and updates.
+
+- Right-click a swatch to reset just that colour back to the theme.
+- Right-click the THEME row, or use **Reset custom colors** in any widget's
+  right-click menu, to reset all of them.
+- Picking Green / Blue / Red / Purple always starts from that theme's clean
+  palette, because a named theme clears `Custom.inc`.
+
 ## Themes
 
 Right-click any widget → **Theme → Green / Blue / Red / Purple**. Every widget
@@ -229,10 +273,11 @@ HackerVibe-DesktopUI/
     ├── Clock/ Calendar/ Weather/ ...   # one .ini per widget
     └── @Resources/
         ├── Settings.inc           # all user-facing config
-        ├── Themes/ + Variables*.inc
+        ├── Themes/                # Theme.inc + Custom.inc (your swatch colours)
         ├── Wallpaper/             # base art + generated wallpapers
         ├── Fonts/                 # bundled, open-licensed fonts
-        └── Scripts/               # Lua: theme engine, quote rotator
+        └── Scripts/               # Lua: theme engine, quote rotator, click actions
+                                   # PickColor.ps1: the swatch colour picker
 ```
 
 ## Linux

@@ -1,5 +1,6 @@
 [Variables]
 Accent=255,110,110,255
+AccentRGB=255,110,110
 Hover=255,170,170,255
 Dim=200,90,90,200
 Faint=150,60,60,160
@@ -7,6 +8,7 @@ Secondary=255,190,90,255
 BG=0,0,0,150
 BarBG=45,25,25,200
 TextLight=255,200,200
+TextLightRGB=255,200,200
 Warn=255,220,120,255
 Crit=255,255,255,255
 ThemeName=Red

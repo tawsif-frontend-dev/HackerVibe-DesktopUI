@@ -421,8 +421,10 @@ if (-not (Ask-Yes 'Install / update now?' $true)) { Write-Host '  Cancelled.'; e
 Write-Step 4 7 'Installing files'
 New-Item -ItemType Directory -Force -Path $target | Out-Null
 $quotes = Join-Path $target '@Resources\Quotes.txt'
+$custom = Join-Path $target '@Resources\Themes\Custom.inc'
 $hadSettings = Test-Path -LiteralPath $settings
 $hadQuotes = Test-Path -LiteralPath $quotes
+$hadCustom = Test-Path -LiteralPath $custom
 
 if ($hadSettings) {
     $backup = "$settings.backup.$(Get-Date -Format 'yyyyMMdd-HHmmss')"
@@ -434,11 +436,12 @@ if ($hadSettings) {
         Remove-Item -Force -ErrorAction SilentlyContinue
 }
 
-& robocopy $source $target /E /XF Settings.inc Quotes.txt /NFL /NDL /NJH /NJS /NP | Out-Null
+& robocopy $source $target /E /XF Settings.inc Quotes.txt Custom.inc /NFL /NDL /NJH /NJS /NP | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "Skin copy failed (robocopy exit code $LASTEXITCODE)." }
 if (-not $hadSettings) { Copy-Item -LiteralPath (Join-Path $source '@Resources\Settings.inc') -Destination $settings }
 if (-not $hadQuotes) { Copy-Item -LiteralPath (Join-Path $source '@Resources\Quotes.txt') -Destination $quotes }
-Write-Ok 'Skin files installed (settings and quotes kept)'
+if (-not $hadCustom) { Copy-Item -LiteralPath (Join-Path $source '@Resources\Themes\Custom.inc') -Destination $custom }
+Write-Ok 'Skin files installed (settings, quotes and custom colors kept)'
 
 # ---- 5. Settings -----------------------------------------------------
 Write-Step 5 7 'Connecting your details'

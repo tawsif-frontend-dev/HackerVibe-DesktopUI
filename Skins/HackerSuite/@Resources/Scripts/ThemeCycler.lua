@@ -24,6 +24,16 @@ local function indexOf(name)
     return 0
 end
 
+-- Custom swatch colours live in Custom.inc and override Theme.inc.
+-- Picking a named theme starts from that theme's clean palette again.
+local function clearCustom()
+    local f = io.open(RES .. 'Themes\\Custom.inc', 'w')
+    if f then
+        f:write('[Variables]\n')
+        f:close()
+    end
+end
+
 function Current()
     return SKIN:GetVariable('ThemeName', 'Blue')
 end
@@ -39,6 +49,7 @@ function SetTheme(name)
         print('ThemeCycler: could not write Theme.inc')
         return
     end
+    clearCustom()
 
     if SKIN:GetVariable('ThemeWallpaper', '1') == '1' then
         local wp = RES .. 'Wallpaper\\Hacker_Wallpaper_' .. name .. '_1920x1080.png'
