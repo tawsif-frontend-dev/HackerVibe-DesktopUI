@@ -190,35 +190,6 @@ On a 4 GB / Core 2 Duo class machine the suite idles at a few percent CPU.
 If you want it even lighter, unload **ThemeCycler** and **Network**; both are
 optional.
 
-## One-click cleanup (Fresh PC)
-
-`CleanCache.bat` is the Win+R routine done for you. Double-click it (or a copy
-on your Desktop) and it clears, in one pass:
-
-| What | Where |
-|---|---|
-| Your temp files | `%TEMP%` |
-| Windows temp | `C:\Windows\Temp` |
-| Prefetch | `C:\Windows\Prefetch` (`*.pf`) |
-| Thumbnail cache | `…\Microsoft\Windows\Explorer\thumbcache_*.db` |
-| Crash / memory dumps | `%LOCALAPPDATA%\CrashDumps`, `C:\Windows\Minidump` |
-| Recycle Bin | all drives |
-
-It then flushes the DNS cache and prints how many MB each step freed, plus your
-free disk space before and after. Windows shows one UAC prompt so the parts
-that need admin (Windows temp, Prefetch) can run; cancel it and the user-level
-caches are still cleaned.
-
-Safe by design: files in use are skipped, and anything inside a `qoder` folder
-in `%TEMP%` is left alone so live tool output is never destroyed. Every run is
-logged to `%LOCALAPPDATA%\HackerSuite\clean-cache.log`.
-
-```bat
-CleanCache.bat              :: clean now
-CleanCache.bat -DryRun      :: show what would be removed, delete nothing
-CleanCache.bat -NoElevate   :: user-level caches only, no UAC prompt
-```
-
 ## Troubleshooting
 
 **A widget is empty or misplaced**
@@ -295,9 +266,7 @@ HackerVibe-DesktopUI/
 ├── install.bat / install.ps1     # one-click installer / personaliser
 ├── doctor.bat / doctor.ps1       # health check
 ├── uninstall.ps1                 # clean removal
-├── CleanCache.bat                # one-click temp / prefetch / cache cleaner
 ├── tools/
-│   ├── CleanCache.ps1            # what the cleaner actually does
 │   ├── make_wallpapers.py        # renders your name onto the base art
 │   └── build_rmskin.py           # builds a .rmskin package
 └── Skins/HackerSuite/
